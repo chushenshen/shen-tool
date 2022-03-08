@@ -1,4 +1,4 @@
-package com.css.collector;
+package com.shen.collector;
 
 import com.alibaba.fastjson.JSON;
 import org.junit.After;

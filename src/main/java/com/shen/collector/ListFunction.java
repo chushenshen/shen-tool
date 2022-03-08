@@ -1,4 +1,4 @@
-package com.css.collector;
+package com.shen.collector;
 
 import java.util.List;
 import java.util.function.Function;

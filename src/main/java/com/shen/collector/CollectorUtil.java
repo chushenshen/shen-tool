@@ -1,4 +1,4 @@
-package com.css.collector;
+package com.shen.collector;
 
 import java.util.*;
 import java.util.function.BiConsumer;
