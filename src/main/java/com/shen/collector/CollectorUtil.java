@@ -2,6 +2,7 @@ package com.shen.collector;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -156,7 +157,16 @@ public class CollectorUtil {
     }
 
     public static <T, R> Collection<T> listCast(List<R> list) {
-        return list.stream().map(v -> (T) v).collect(Collectors.toList());
+        return listCast(list, null);
+    }
+
+    public static <T, R> Collection<T> listCast(List<R> list, Consumer<R> consumer) {
+        return list.stream().map(v -> {
+            if (consumer != null) {
+                consumer.accept(v);
+            }
+            return (T) v;
+        }).collect(Collectors.toList());
     }
 
     // TODO 两层嵌套list合并 {by css} 2021/08/05 14:39:05

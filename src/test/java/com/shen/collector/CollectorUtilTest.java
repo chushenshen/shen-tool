@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -40,7 +41,8 @@ public class CollectorUtilTest {
 
     @Test
     public void groupAndFirst() {
-        Map<?, HashMap<String, ?>> collect = hashMapList.stream()
+        Stream<HashMap<String, Object>> stream = hashMapList.stream();
+        Map<?, HashMap<String, ?>> collect = stream
                 .collect(CollectorUtil.groupAndFist(v -> v.get("key")));
         System.out.println(JSON.toJSONString(collect));
     }
