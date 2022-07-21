@@ -6,10 +6,19 @@
 
     <groupId>io.github.cShen-code</groupId>
     <artifactId>shen-tool</artifactId>
-    <version>1.0.2-RELEASE</version>
+    <version>2.0.0-RELEASE</version>
     <name>shenTool</name>
-    <description>工具类-简化steam操作</description>
+    <description>
+        工具类-简化steam操作
+        通过简单的方式完成流 分组、循环
+    </description>
     <url>https://github.com/cShen-code/shen-tool</url>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -20,15 +29,10 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.79</version>
-            <scope>provided</scope>
+            <version>2.0.7</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
     <!-- 开源许可证 -->
     <licenses>
@@ -41,7 +45,7 @@
     <!-- 开发者信息 -->
     <developers>
         <developer>
-            <name>chushenshen</name>
+            <name>褚申申</name>
             <email>504640003@qq.com</email>
         </developer>
     </developers>
@@ -84,6 +88,7 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>2.9.1</version>
                         <configuration>
+                            <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
                             <show>private</show>
                             <nohelp>true</nohelp>
                             <charset>UTF-8</charset>
@@ -94,7 +99,7 @@
                         </configuration>
                         <executions>
                             <execution>
-                                <phase>package</phase>
+                                <id>attach-javadocs</id>
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>

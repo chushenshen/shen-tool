@@ -1,4 +1,4 @@
-package com.shen.collector;
+package io.github.cshencode.collector;
 
 import com.alibaba.fastjson.JSON;
 import org.junit.After;

@@ -1,4 +1,4 @@
-package com.shen.stream;
+package io.github.cshencode.stream;
 
 /**
  * <p>

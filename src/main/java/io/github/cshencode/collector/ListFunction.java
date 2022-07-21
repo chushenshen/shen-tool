@@ -1,4 +1,4 @@
-package com.shen.collector;
+package io.github.cshencode.collector;
 
 import java.util.List;
 import java.util.function.Function;
