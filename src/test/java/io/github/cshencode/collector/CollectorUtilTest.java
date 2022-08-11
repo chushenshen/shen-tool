@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -97,7 +98,6 @@ public class CollectorUtilTest {
                 ;
         System.out.println(key);
 
-
     }
 
     @Test
@@ -109,5 +109,13 @@ public class CollectorUtilTest {
                         })
                 ));
         System.out.println(key);
+    }
+
+    @Test
+    public void foreachI() {
+        CollectorUtil.forEachI(hashMapList.stream(), (v, i)->{
+            System.out.println(v);
+            System.out.println(i);
+        });
     }
 }

@@ -1,5 +1,7 @@
 package io.github.cshencode.collector;
 
+import io.github.cshencode.function.ListFunction;
+
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -25,9 +27,10 @@ public class CollectorUtil {
      *
      * @param stream 流
      * @param action action
-     * @param <T> 泛型
+     * @param <T>    泛型
      * @return 返回入参流
      */
+    @Deprecated
     public static <T> Stream<T> forEachI(Stream<T> stream, BiConsumer<Integer, ? super T> action) {
         Objects.requireNonNull(stream);
         Objects.requireNonNull(action);
@@ -41,12 +44,22 @@ public class CollectorUtil {
         return stream;
     }
 
+    public static <T> Stream<T> peekI(Stream<T> stream, BiConsumer<? super T, Integer> action) {
+        Objects.requireNonNull(stream);
+        Objects.requireNonNull(action);
+        final int[] index = {0};
+        return stream.peek(v -> {
+            action.accept(v, index[0]);
+            index[0]++;
+        });
+    }
+
     /**
      * 按照key进行分组操作
      *
      * @param getId skuFunction
-     * @param <T> 类泛型
-     * @param <K> 无
+     * @param <T>   类泛型
+     * @param <K>   无
      * @return 返回值
      */
     public static <T, K>
@@ -60,8 +73,8 @@ public class CollectorUtil {
      * 功能等同于 ：groupAndFist 方法，效率会高一点
      *
      * @param idFunction 需要确保id唯一，不然会抛出map的merge异常
-     * @param <T> 无
-     * @param <K> 无
+     * @param <T>        无
+     * @param <K>        无
      * @return 无
      */
     public static <T, K>
@@ -73,8 +86,8 @@ public class CollectorUtil {
      * 分组后取每组的第一个
      *
      * @param getId 无
-     * @param <T> 无
-     * @param <K> 无
+     * @param <T>   无
+     * @param <K>   无
      * @return 无
      */
     public static <T, K>
@@ -86,10 +99,10 @@ public class CollectorUtil {
     /**
      * 分组后排序
      *
-     * @param getId 无
+     * @param getId          无
      * @param sortComparator 排序方法
-     * @param <T> 无
-     * @param <K> 无
+     * @param <T>            无
+     * @param <K>            无
      * @return 无
      */
     public static <T, K>
@@ -106,10 +119,10 @@ public class CollectorUtil {
      * 默认分组成list
      *
      * @param classifier 无
-     * @param finisher 无
-     * @param <T> 无
-     * @param <K> 无
-     * @param <RR> 无
+     * @param finisher   无
+     * @param <T>        无
+     * @param <K>        无
+     * @param <RR>       无
      * @return 无
      */
     public static <T, K, RR>
@@ -123,10 +136,10 @@ public class CollectorUtil {
      * 默认分组成Set
      *
      * @param classifier 无
-     * @param finisher 无
-     * @param <T> 无
-     * @param <K> 无
-     * @param <RR> 无
+     * @param finisher   无
+     * @param <T>        无
+     * @param <K>        无
+     * @param <RR>       无
      * @return 无
      */
     public static <T, K, RR>
@@ -137,16 +150,17 @@ public class CollectorUtil {
     }
 
     /**
-     *  分组并且紧跟着做一些自定义操作
+     * 分组并且紧跟着做一些自定义操作
+     *
      * @param classifier 无
      * @param downstream 无
-     * @param finisher 无
-     * @return 无
+     * @param finisher   无
      * @param <T>        主键的字段
      * @param <K>        主键的值
      * @param <A>        每组中的一个值的数据格式
      * @param <D>        分组之后的列表值
      * @param <RR>       分组之后处理完每组之后每组返回的值
+     * @return 无
      */
     public static <T, K, A, D, RR>
     Collector<T, ?, Map<K, RR>> groupAndThen(Function<? super T, ? extends K> classifier,
