@@ -27,14 +27,33 @@ public class ListCompareUtilTest {
         newCompareBeanList.add(new ListCompareBean(3L, "test3"));
 
         ListCompareUtil.builder(oldCompareBeanList, newCompareBeanList, ListCompareBean::getId)
-                .whenInsert(v -> {
-                    System.out.println("新增：" + JSON.toJSONString(v));
+                // 批量回调
+                .whenInsert(list -> {
+                    // 进行orm操作
+                    System.out.println("新增：" + JSON.toJSONString(list));
                 })
-                .whenUpdate(v -> {
-                    System.out.println("更新：" + JSON.toJSONString(v));
+                .whenUpdate(list -> {
+                    System.out.println("更新：" + JSON.toJSONString(list));
                 })
-                .whenRemove(v -> {
-                    System.out.println("删除：" + JSON.toJSONString(v));
+                .whenRemove(list -> {
+                    // id列表
+                    System.out.println("删除：" + JSON.toJSONString(list));
+                })
+                .compare();
+
+        ListCompareUtil.builder(oldCompareBeanList, newCompareBeanList, ListCompareBean::getId)
+                // 单个回调，for循环挨个回调
+                .whenInsertOne(one -> {
+                    System.out.println("单个新增：" + JSON.toJSONString(one));
+                    return 0;
+                })
+                .whenUpdateOne(one -> {
+                    System.out.println("单个更新：" + JSON.toJSONString(one));
+                    return 0;
+                })
+                .whenRemoveOne(one -> {
+                    System.out.println("单个删除：" + JSON.toJSONString(one));
+                    return 0;
                 })
                 .compare();
     }
