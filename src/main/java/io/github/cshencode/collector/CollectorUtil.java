@@ -57,14 +57,14 @@ public class CollectorUtil {
     /**
      * 按照key进行分组操作
      *
-     * @param getId skuFunction
-     * @param <T>   类泛型
-     * @param <K>   无
+     * @param keyMapper skuFunction
+     * @param <T>       类泛型
+     * @param <K>       无
      * @return 返回值
      */
     public static <T, K>
-    Collector<T, ?, Map<K, List<T>>> group(Function<T, K> getId) {
-        return Collectors.groupingBy(getId);
+    Collector<T, ?, Map<K, List<T>>> group(Function<T, K> keyMapper) {
+        return Collectors.groupingBy(keyMapper);
     }
 
 
@@ -72,43 +72,58 @@ public class CollectorUtil {
      * list转map
      * 功能等同于 ：groupAndFist 方法，效率会高一点
      *
-     * @param idFunction 需要确保id唯一，不然会抛出map的merge异常
-     * @param <T>        无
-     * @param <K>        无
+     * @param keyMapper 如果key重复，默认取最后一个
+     * @param <T>       无
+     * @param <K>       无
      * @return 无
      */
     public static <T, K>
-    Collector<T, ?, Map<K, T>> toMap(Function<T, K> idFunction) {
-        return Collectors.toMap(idFunction, Function.identity());
+    Collector<T, ?, Map<K, T>> toMap(Function<T, K> keyMapper) {
+        return Collectors.toMap(keyMapper, Function.identity(), (u1, u2) -> u2);
+    }
+
+    /**
+     * list转map
+     * 功能等同于 ：groupAndFist 方法，效率会高一点
+     *
+     * @param keyMapper 如果key重复，默认取最后一个
+     * @param <T>       无
+     * @param <K>       无
+     * @return 无
+     */
+    public static <T, K, U>
+    Collector<T, ?, Map<K, U>> toMap(Function<? super T, ? extends K> keyMapper,
+                                     Function<? super T, ? extends U> valueMapper) {
+        return Collectors.toMap(keyMapper, valueMapper, (u1, u2) -> u2);
     }
 
     /**
      * 分组后取每组的第一个
      *
-     * @param getId 无
-     * @param <T>   无
-     * @param <K>   无
+     * @param classifier 无
+     * @param <T>        无
+     * @param <K>        无
      * @return 无
      */
     public static <T, K>
-    Collector<T, ?, Map<K, T>> groupAndFist(Function<T, K> getId) {
-        return Collectors.groupingBy(getId,
+    Collector<T, ?, Map<K, T>> groupAndFist(Function<T, K> classifier) {
+        return Collectors.groupingBy(classifier,
                 Collectors.collectingAndThen(Collectors.toList(), ListFunction.listFirst()));
     }
 
     /**
      * 分组后排序
      *
-     * @param getId          无
+     * @param classifier     无
      * @param sortComparator 排序方法
      * @param <T>            无
      * @param <K>            无
      * @return 无
      */
     public static <T, K>
-    Collector<T, ?, Map<K, List<T>>> groupAndSort(Function<T, K> getId,
+    Collector<T, ?, Map<K, List<T>>> groupAndSort(Function<T, K> classifier,
                                                   Comparator<T> sortComparator) {
-        return Collectors.groupingBy(getId,
+        return Collectors.groupingBy(classifier,
                 Collectors.collectingAndThen(Collectors.toList(), list -> {
                     list.sort(sortComparator);
                     return list;

@@ -6,7 +6,7 @@
 
     <groupId>io.github.cShen-code</groupId>
     <artifactId>shen-tool</artifactId>
-    <version>2.0.3-RELEASE</version>
+    <version>2.0.4-RELEASE</version>
     <name>shenTool</name>
     <description>
         工具类-简化steam操作
@@ -17,9 +17,20 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
+
+        <!--测试依赖 - start -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -27,11 +38,19 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>2.0.7</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>2.0.20</version>
+            <scope>test</scope>
+        </dependency>
+        <!--测试依赖 - end -->
+
     </dependencies>
 
     <!-- 开源许可证 -->
