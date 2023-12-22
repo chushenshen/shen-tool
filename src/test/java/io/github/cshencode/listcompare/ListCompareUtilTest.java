@@ -1,7 +1,7 @@
 package io.github.cshencode.listcompare;
 
 import com.alibaba.fastjson.JSON;
-import io.github.cshencode.util.ListCompareUtil;
+import io.github.cshencode.util.list.ListCompareUtil;
 import org.junit.Test;
 
 import java.util.ArrayList;

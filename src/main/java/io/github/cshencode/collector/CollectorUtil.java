@@ -21,7 +21,6 @@ import java.util.stream.Stream;
  */
 public class CollectorUtil {
 
-
     /**
      * 带有下标的foreach循环
      *
@@ -79,6 +78,16 @@ public class CollectorUtil {
      */
     public static <T, K>
     Collector<T, ?, Map<K, T>> toMap(Function<T, K> keyMapper) {
+        return toMap2(keyMapper);
+    }
+
+    public static <T, K>
+    Collector<T, ?, Map<K, T>> toMap1(Function<T, K> keyMapper) {
+        return Collectors.toMap(keyMapper, Function.identity(), (u1, u2) -> u1);
+    }
+
+    public static <T, K>
+    Collector<T, ?, Map<K, T>> toMap2(Function<T, K> keyMapper) {
         return Collectors.toMap(keyMapper, Function.identity(), (u1, u2) -> u2);
     }
 
@@ -185,16 +194,43 @@ public class CollectorUtil {
                 Collectors.collectingAndThen(downstream, finisher));
     }
 
-    public static <T, R> Collection<T> listCast(List<R> list) {
+    /**
+     * 向上强转
+     *
+     * @param list
+     * @param <T>  入参
+     * @param <R>  出参
+     * @return
+     */
+    public static <T extends R, R> Collection<R> listCast(Collection<T> list) {
         return listCast(list, null);
     }
 
-    public static <T, R> Collection<T> listCast(List<R> list, Consumer<R> consumer) {
-        return list.stream().map(v -> {
+    /**
+     * 向上强转
+     *
+     * @param list
+     * @param <T>  入参
+     * @param <R>  出参
+     * @return
+     */
+    public static <T extends R, R> Collection<R> listCast(Collection<T> list, Consumer<T> consumer) {
+        return list.stream().peek(v -> {
             if (consumer != null) {
                 consumer.accept(v);
             }
-            return (T) v;
+        }).collect(Collectors.toList());
+    }
+
+    public static <T extends R, R> List<R> listCast(List<T> list) {
+        return listCast(list, null);
+    }
+
+    public static <T extends R, R> List<R> listCast(List<T> list, Consumer<T> consumer) {
+        return list.stream().peek(v -> {
+            if (consumer != null) {
+                consumer.accept(v);
+            }
         }).collect(Collectors.toList());
     }
 

@@ -1,4 +1,4 @@
-package io.github.cshencode.util;
+package io.github.cshencode.util.list;
 
 
 import net.sf.cglib.beans.BeanCopier;
@@ -12,19 +12,24 @@ import java.util.stream.Collectors;
 /**
  * * 数据对比器
  *
+ * @author css
  * @param <Entity> 实体类的类型
  * @param <IdType> 实体类id的类型
  */
 public class ListCompareUtil<Entity, IdType> {
-    private final static ConcurrentHashMap<Class<?>, BeanCopier> beanCopierMap = new ConcurrentHashMap<>();
+    private final static ConcurrentHashMap<Class<?>, BeanCopier> BEAN_COPIER_MAP = new ConcurrentHashMap<>();
 
     private final Collection<Entity> oldenList;
     private final Collection<Entity> newlyList;
-    // 数组回调
+    /**
+     * 数组回调
+     */
     private Consumer<List<Entity>> updateListConsumer;
     private Consumer<List<Entity>> insertListConsumer;
     private Consumer<Set<IdType>> idRemoveConsumer;
-    // 单个回调
+    /**
+     * 单个回调
+     */
     private Function<Entity, ?> updateOneFunction;
     private Function<Entity, ?> insertOneFunction;
     private Function<IdType, ?> idOneFunction;
@@ -42,19 +47,31 @@ public class ListCompareUtil<Entity, IdType> {
         return this;
     }
 
-    // 当有更新数据发生时
+    /**
+     * 当有更新数据发生时
+     * @param updateListConsumer
+     * @return
+     */
     public ListCompareUtil<Entity, IdType> whenUpdate(Consumer<List<Entity>> updateListConsumer) {
         this.updateListConsumer = updateListConsumer;
         return this;
     }
 
-    // 当有新数据发生时
+    /**
+     * 当有新数据发生时
+     * @param insertListConsumer
+     * @return
+     */
     public ListCompareUtil<Entity, IdType> whenInsert(Consumer<List<Entity>> insertListConsumer) {
         this.insertListConsumer = insertListConsumer;
         return this;
     }
 
-    // 当有删除数据发生时
+    /**
+     * 当有删除数据发生时
+     * @param idRemoveConsumer
+     * @return
+     */
     public ListCompareUtil<Entity, IdType> whenRemove(Consumer<Set<IdType>> idRemoveConsumer) {
         this.idRemoveConsumer = idRemoveConsumer;
         return this;
@@ -103,9 +120,19 @@ public class ListCompareUtil<Entity, IdType> {
         if (oldenList.isEmpty() && newlyList.isEmpty()) {
             return;
         }
+
+        List<Entity> insertList = new ArrayList<>();
+        List<Entity> tmpNewlyList = new ArrayList<>();
+        for (Entity newEntity : newlyList) {
+            if (idGetter.apply(newEntity) == null) {
+                insertList.add(newEntity);
+            } else {
+                tmpNewlyList.add(newEntity);
+            }
+        }
         //通过ID映射数据
         Map<IdType, Entity> oldenMap = this.oldenList.stream().collect(Collectors.toMap(idGetter, Function.identity(), (f, s) -> f, LinkedHashMap::new));
-        Map<IdType, Entity> newlyMap = this.newlyList.stream().collect(Collectors.toMap(idGetter, Function.identity(), (f, s) -> f, LinkedHashMap::new));
+        Map<IdType, Entity> newlyMap = tmpNewlyList.stream().collect(Collectors.toMap(idGetter, Function.identity(), (f, s) -> f, LinkedHashMap::new));
 
         Set<IdType> oldenKeys = oldenMap.keySet();
         Set<IdType> newlyKeys = newlyMap.keySet();
@@ -113,7 +140,6 @@ public class ListCompareUtil<Entity, IdType> {
         //获取需要更新的数据, oldenMap中存在newlyMap中的key，则需要更新
         //获取需要新增的数据，newlyMap中不存在与oldenMap中的，则需要添加
         //获取需要删除的数据，oldenMap中不存在与newlyMap中的，则需要删除
-        List<Entity> insertList = new ArrayList<>();
         List<Entity> updateList = new ArrayList<>();
         Set<IdType> idRemoves = new HashSet<>();
         List<Entity> removeList = new ArrayList<>();
@@ -123,7 +149,7 @@ public class ListCompareUtil<Entity, IdType> {
             if (newlyKeys.contains(oldenKey)) {
                 Entity olden = oldenMap.get(oldenKey);
                 Entity newly = newlyMap.get(oldenKey);
-                BeanCopier beanCopier = beanCopierMap.computeIfAbsent(newly.getClass(), key ->
+                BeanCopier beanCopier = BEAN_COPIER_MAP.computeIfAbsent(newly.getClass(), key ->
                         BeanCopier.create(key, key, false));
                 beanCopier.copy(newly, olden, null);
                 updateList.add(olden);

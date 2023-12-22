@@ -1,5 +1,35 @@
-工具类-简化steam操作
-通过简单的方式完成流 分组、循环
+# 工具类-简化steam操作
+
+> 功能列表：
+> 1. 通过简单的方式完成流 分组、循环
+> 2. 列表对比
+
+## 📦安装
+
+### 🍊Maven
+在项目的pom.xml的dependencies中加入以下内容:
+
+```xml
+<!-- https://mvnrepository.com/artifact/io.github.cShen-code/shen-tool -->
+<dependency>
+    <groupId>io.github.cShen-code</groupId>
+    <artifactId>shen-tool</artifactId>
+    <version>2.0.3-RELEASE</version>
+</dependency>
+```
+
+### 🍐Gradle
+```
+// https://mvnrepository.com/artifact/io.github.cShen-code/shen-tool
+implementation group: 'io.github.cShen-code', name: 'shen-tool', version: '2.0.3-RELEASE'
+```
+
+### 📥下载jar
+
+点击以下链接，下载`shen-tool-X.X.X.jar`即可：
+
+- [Maven中央库](https://repo1.maven.org/maven2/io/github/cShen-code/shen-tool/2.0.3-RELEASE/)
+
 
 ## 基础用法
 ```java
@@ -23,26 +53,29 @@ testBeanList.add(new TestBean(2L, "two"));
 分组，每组取第一个
 Stream<TestBean> stream = testBeanList.stream();
 Map<Long, TestBean> collect = stream
-.collect(CollectorUtil.groupAndFist(TestBean::getId));
+    .collect(CollectorUtil.groupAndFist(TestBean::getId));
 System.out.println(JSON.toJSONString(collect));
+
 输出结果：
 {1:{"id":1,"name":"one"},2:{"id":2,"name":"two"},3:{"id":3,"name":"three"},4:{"id":4,"name":"four"}}
 
 
 // 分组，组内通过id排序
 Map<Long, List<TestBean>> collect = testBeanList.stream()
-.collect(CollectorUtil.groupAndSort(TestBean::getId, (v1, v2) -> {
-//倒叙
-return (int) (v2.getId() - v1.getId());
-}));
+    .collect(CollectorUtil
+        .groupAndSort(TestBean::getId, (v1, v2) -> {
+        //倒叙
+            return (int) (v2.getId() - v1.getId());
+        }));
 System.out.println(JSON.toJSONString(collect));
+
 输出结果：
 {1:[{"id":1,"name":"one"}],2:[{"id":2,"name":"two"}],3:[{"id":3,"name":"three"}],4:[{"id":4,"name":"four"},{"id":4,"name":"four1"}]}
 
 带下标的peek
 long count = CollectorUtil.peekI(testBeanList.stream(), (v, i) -> {
-System.out.println(v);
-System.out.println(i);
+    System.out.println(v);
+    System.out.println(i);
 }).count();
 ```
 

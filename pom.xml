@@ -6,7 +6,7 @@
 
     <groupId>io.github.cShen-code</groupId>
     <artifactId>shen-tool</artifactId>
-    <version>2.0.4-RELEASE</version>
+    <version>2.0.6-RELEASE</version>
     <name>shenTool</name>
     <description>
         工具类-简化steam操作
@@ -19,6 +19,8 @@
         <maven.compiler.target>8</maven.compiler.target>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <cglib.version>3.3.0</cglib.version>
+        <mybatis-plus.version>3.0.6</mybatis-plus.version>
     </properties>
 
     <dependencies>
@@ -26,9 +28,15 @@
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
-            <version>3.3.0</version>
+            <version>${cglib.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus</artifactId>
+            <version>${mybatis-plus.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!--测试依赖 - start -->
         <dependency>
