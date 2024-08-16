@@ -12,7 +12,7 @@ import java.util.Collection;
  */
 public class StreamUtil<T> {
 
-    Collection<T> collection;
+    private Collection<T> collection;
 
     public StreamUtil(Collection<T> collection) {
         this.collection = collection;

@@ -82,15 +82,18 @@ public class ListFillUtil<Entity> {
                     .in(listFillProperty.getTargetGetFunction(), queryParamList);
             List<ConvertGroup<Entity, T, I>> convertGroupList = listFillProperty.getConvertGroupList();
             // 查询列，只查需要转换的列
-            List<SFunction<T, ?>> selectFieldList = new ArrayList<>();
-            selectFieldList.add(listFillProperty.getTargetGetFunction());
-            for (ConvertGroup<Entity, T, I> convertGroup : convertGroupList) {
-                if (hasColumn(convertGroup.getTargetNameGetFunction())) {
-                    selectFieldList.add(convertGroup.getTargetNameGetFunction());
+            // 查询列，只查需要转换的列
+            if (!listFillProperty.isSelectAll()) {
+                List<SFunction<T, ?>> selectFieldList = new ArrayList<>();
+                selectFieldList.add(listFillProperty.getTargetGetFunction());
+                for (ConvertGroup<Entity, T, I> convertGroup : convertGroupList) {
+                    if (hasColumn(convertGroup.getTargetNameGetFunction())) {
+                        selectFieldList.add(convertGroup.getTargetNameGetFunction());
+                    }
                 }
-            }
 
-            queryChainWrapper.select(selectFieldList.toArray(new SFunction[]{}));
+                queryChainWrapper.select(selectFieldList.toArray(new SFunction[]{}));
+            }
 
             dbList = ormService.list(queryChainWrapper);
         } else if (ormFunction != null) {
@@ -180,7 +183,7 @@ public class ListFillUtil<Entity> {
     public boolean hasColumn(SFunction func) {
 
         Object stringStringMap = LAMBDA_CACHE.get(func);
-        if(stringStringMap != null){
+        if (stringStringMap != null) {
             return true;
         }
 
@@ -192,9 +195,13 @@ public class ListFillUtil<Entity> {
         Class<LambdaUtils> lambdaUtilsClass = LambdaUtils.class;
         try {
             Object columnCache;
-            if ("3.0.6".equals(getMybatisPlusVersion())) {
+            String mybatisPlusVersion = getMybatisPlusVersion();
+            if (mybatisPlusVersion != null && mybatisPlusVersion.startsWith("3.0")) {
                 Method getColumnMap = lambdaUtilsClass.getMethod("getColumnMap", String.class);
                 Map<String, String> columnMap = (Map<String, String>) getColumnMap.invoke(null, aClass.getSimpleName());
+                if (columnMap == null || columnMap.isEmpty()) {
+                    columnMap = (Map<String, String>) getColumnMap.invoke(null, aClass.getName());
+                }
                 columnCache = columnMap.get(fieldName);
             } else {
                 Method getColumnMap = lambdaUtilsClass.getMethod("getColumnMap", Class.class);

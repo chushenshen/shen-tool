@@ -26,22 +26,6 @@ public class ConvertGroup<SOURCE, TARGET, I> {
     public ConvertGroup() {
     }
 
-//    public ConvertGroup(SFunction<TARGET, ?> targetNameGetFunction, BiConsumer<SOURCE, I> sourceNameSetFunction) {
-//        this.targetNameGetFunction = targetNameGetFunction;
-//        this.sourceNameSetFunction = sourceNameSetFunction;
-//    }
-//    public ConvertGroup(SFunction<TARGET, ?> targetNameGetFunction, BiConsumer<SOURCE, I> sourceNameSetFunction, I defaultValue) {
-//        this.targetNameGetFunction = targetNameGetFunction;
-//        this.sourceNameSetFunction = sourceNameSetFunction;
-//        this.defaultValue = defaultValue;
-//    }
-//
-//    public ConvertGroup(SFunction<TARGET, ?> targetNameGetFunction, BiConsumer<SOURCE, I> sourceNameSetFunction, BiFunction<Object, Map<I, TARGET>, I> compareHandler) {
-//        this.targetNameGetFunction = targetNameGetFunction;
-//        this.sourceNameSetFunction = sourceNameSetFunction;
-//        this.compareHandler = compareHandler;
-//    }
-
     public static <SOURCE, TARGET, I> ConvertGroup<SOURCE, TARGET, I> cv(SFunction<TARGET, ?> targetNameGetFunction, BiConsumer<SOURCE, I> sourceNameSetFunction) {
         ConvertGroup<SOURCE, TARGET, I> convertGroup = new ConvertGroup<>();
         convertGroup.setTargetNameGetFunction(targetNameGetFunction);
@@ -54,6 +38,14 @@ public class ConvertGroup<SOURCE, TARGET, I> {
         convertGroup.setTargetNameGetFunction(targetNameGetFunction);
         convertGroup.setSourceNameSetFunction(sourceNameSetFunction);
         convertGroup.setCompareHandler(compareHandler);
+        return convertGroup;
+    }
+
+    public static <SOURCE, TARGET, I> ConvertGroup<SOURCE, TARGET, I> cv(SFunction<TARGET, ?> targetNameGetFunction, BiConsumer<SOURCE, I> sourceNameSetFunction, I defaultValue) {
+        ConvertGroup<SOURCE, TARGET, I> convertGroup = new ConvertGroup<>();
+        convertGroup.setTargetNameGetFunction(targetNameGetFunction);
+        convertGroup.setSourceNameSetFunction(sourceNameSetFunction);
+        convertGroup.defaultValue = defaultValue;
         return convertGroup;
     }
 

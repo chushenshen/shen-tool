@@ -66,6 +66,10 @@ public class CollectorUtil {
         return Collectors.groupingBy(keyMapper);
     }
 
+    public static <T, K, D>
+    Collector<T, ?, Map<K, D>> group(Function<T, K> keyMapper, Collector<? super T, K, D> downstream) {
+        return Collectors.groupingBy(keyMapper, downstream);
+    }
 
     /**
      * list转map
@@ -223,7 +227,7 @@ public class CollectorUtil {
     }
 
     public static <T extends R, R> List<R> listCast(List<T> list) {
-        return listCast(list, null);
+        return (List<R>) list;
     }
 
     public static <T extends R, R> List<R> listCast(List<T> list, Consumer<T> consumer) {

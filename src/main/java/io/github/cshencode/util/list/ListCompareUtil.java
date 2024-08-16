@@ -152,7 +152,7 @@ public class ListCompareUtil<Entity, IdType> {
                 BeanCopier beanCopier = BEAN_COPIER_MAP.computeIfAbsent(newly.getClass(), key ->
                         BeanCopier.create(key, key, false));
                 beanCopier.copy(newly, olden, null);
-                updateList.add(olden);
+                updateList.add(newly);
             } else {//不存在则需要删除
                 idRemoves.add(oldenKey);
                 removeList.add(oldenMap.get(oldenKey));

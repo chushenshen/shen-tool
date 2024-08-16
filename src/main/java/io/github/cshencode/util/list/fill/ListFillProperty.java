@@ -44,6 +44,8 @@ public class ListFillProperty<SOURCE, TARGET, I> {
     // 转换字段
     private List<ConvertGroup<SOURCE, TARGET, I>> convertGroupList;
 
+    private boolean selectAll = false;
+
     public ListFillProperty<SOURCE, TARGET, I> addChildren(MFunction<ListFillUtil<TARGET>, ListFillUtil<TARGET>> children) {
         childrenList.add(children);
         return this;
@@ -119,5 +121,21 @@ public class ListFillProperty<SOURCE, TARGET, I> {
     public ListFillProperty<SOURCE, TARGET, I> setConvertGroupList(List<ConvertGroup<SOURCE, TARGET, I>> convertGroupList) {
         this.convertGroupList = convertGroupList;
         return this;
+    }
+
+    /**
+     * 查询全部列
+     */
+    public ListFillProperty<SOURCE, TARGET, I> selectAll() {
+        this.selectAll = true;
+        return this;
+    }
+
+    public boolean isSelectAll() {
+        return selectAll;
+    }
+
+    public void setSelectAll(boolean selectAll) {
+        this.selectAll = selectAll;
     }
 }

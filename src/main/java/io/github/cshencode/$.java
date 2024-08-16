@@ -1,5 +1,6 @@
 package io.github.cshencode;
 
+import io.github.cshencode.collector.CollectorUtil;
 import io.github.cshencode.stream.StreamUtil;
 
 import java.util.Collection;
@@ -19,6 +20,10 @@ public class $ {
 
     public static <T> StreamUtil<T> listFill(Collection<T> collection) {
         return StreamUtil.streamUtil(collection);
+    }
+
+    public static <T extends R, R> Collection<R> listCast(Collection<T> collection) {
+        return CollectorUtil.listCast(collection);
     }
 
 }
