@@ -28,4 +28,4 @@ jobs:
         env:
           MAVEN_USERNAME: ${{ secrets.NAME }}
           MAVEN_PASSWORD: ${{ secrets.PASSWORD }}
-        run: mvn --batch-mode -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} clean deploy
+        run: mvn --batch-mode -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} clean deploy -P release
