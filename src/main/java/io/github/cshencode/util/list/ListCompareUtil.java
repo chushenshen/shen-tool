@@ -149,9 +149,6 @@ public class ListCompareUtil<Entity, IdType> {
             if (newlyKeys.contains(oldenKey)) {
                 Entity olden = oldenMap.get(oldenKey);
                 Entity newly = newlyMap.get(oldenKey);
-                BeanCopier beanCopier = BEAN_COPIER_MAP.computeIfAbsent(newly.getClass(), key ->
-                        BeanCopier.create(key, key, false));
-                beanCopier.copy(newly, olden, null);
                 updateList.add(newly);
             } else {//不存在则需要删除
                 idRemoves.add(oldenKey);
